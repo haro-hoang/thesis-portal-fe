@@ -12,7 +12,6 @@ const Header = () => {
         setIsDropdownOpen(!isDropdownOpen);
     };
 
-
     return (
         <header className="bg-white border-b border-gray-200 fixed top-0 right-0 left-64 z-30">
             <div className="px-4 py-3 flex items-center justify-between">
@@ -47,13 +46,7 @@ const Header = () => {
                         <div className="flex items-center gap-3 cursor-pointer hover:bg-gray-100 rounded-lg p-2"
                             onClick={toggleDropdown}>
                             <div className="h-8 w-8 rounded-full bg-gray-200 overflow-hidden">
-                                <Image
-                                    src="/default-avatar.png"
-                                    alt="User avatar"
-                                    width={32}
-                                    height={32}
-                                    className="object-cover"
-                                />
+
                             </div>
                             <div className="hidden md:block">
                                 <p className="text-sm font-medium text-gray-700">John Doe</p>

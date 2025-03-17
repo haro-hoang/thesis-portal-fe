@@ -43,7 +43,7 @@ const Sidebar = () => {
             ${isCollapsed ? 'w-10' : 'w-64'}`}>
             <div className="p-4">
                 {/* Toggle Button */}
-                <button
+                {/* <button
                     onClick={() => setIsCollapsed(!isCollapsed)}
                     className="absolute -right-3 top-10 bg-gray-800 rounded-full p-1 cursor-pointer hover:bg-gray-700"
                 >
@@ -55,7 +55,7 @@ const Sidebar = () => {
                     >
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
                     </svg>
-                </button>
+                </button> */}
 
                 <div className="flex items-center gap-2 mb-8">
                     <Image
@@ -83,7 +83,7 @@ const Sidebar = () => {
                         </li>
                         <li>
                             <Link
-                                href="/theses"
+                                href="/graduation-thesis"
                                 className="flex items-center gap-2 p-2 rounded-lg hover:bg-gray-700 transition-colors"
                             >
                                 <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
