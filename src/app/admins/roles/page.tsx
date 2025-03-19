@@ -1,19 +1,12 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import Link from 'next/link';
 import { Suspense } from 'react';
 import { createRole, deleteRole, getRoles, updateRole } from '@/services/roles/roleService';
-import { Button, Dialog, DialogActions, DialogContent, DialogTitle, FormControlLabel, Paper, Switch, TextField } from '@mui/material';
+import { Alert, Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, FormControlLabel, Paper, Snackbar, Switch, TextField } from '@mui/material';
 import { DataGrid, GridColDef } from '@mui/x-data-grid';
 import { Add } from '@mui/icons-material';
-
-interface Role {
-    id: string;
-    name: string;
-    description: string;
-    isActive: boolean;
-}
+import { Role } from '@/services/roles/@/types/role';
 
 export default function RolesPage() {
     const [roles, setRoles] = useState<Role[]>([]);
@@ -33,6 +26,16 @@ export default function RolesPage() {
         isActive: true
     });
     // end handle popup
+
+    // declare for delete confirmation dialog
+    const [deleteConfirmOpen, setDeleteConfirmOpen] = useState(false);
+    const [deletingId, setDeletingId] = useState<string | null>(null);
+    const [snackbar, setSnackbar] = useState({
+        open: false,
+        message: '',
+        severity: 'success' as 'success' | 'error'
+    });
+    // end delete confirmation dialog
 
     useEffect(() => {
         fetchRoles();
@@ -54,14 +57,46 @@ export default function RolesPage() {
         }
     };
 
-    const handleDelete = async (id: string) => {
+    // handle delete confirmation dialog
+    const handleDeleteClick = (id: string) => {
+        setDeletingId(id);
+        setDeleteConfirmOpen(true);
+    };
+
+    const handleDeleteConfirm = async () => {
+        if (!deletingId) return;
+
         try {
-            await deleteRole(id);
+            await deleteRole(deletingId);
+            setSnackbar({
+                open: true,
+                message: 'Role deleted successfully',
+                severity: 'success'
+            });
             fetchRoles();
         } catch (error) {
             console.error('Error deleting role:', error);
+            setSnackbar({
+                open: true,
+                message: 'Error deleting role',
+                severity: 'error'
+            });
+        } finally {
+            setDeleteConfirmOpen(false);
+            setDeletingId(null);
         }
     };
+
+    const handleDeleteCancel = () => {
+        setDeleteConfirmOpen(false);
+        setDeletingId(null);
+    };
+
+    const handleSnackbarClose = () => {
+        setSnackbar(prev => ({ ...prev, open: false }));
+    };
+
+    // end handle delete confirmation dialog
 
     const toggleStatus = async (id: string, currentStatus: boolean) => {
         try {
@@ -119,7 +154,7 @@ export default function RolesPage() {
                         </svg>
                     </button>
                     <button
-                        onClick={() => handleDelete(params.id as string)}
+                        onClick={() => handleDeleteClick(params.id as string)}
                         className="p-2 text-red-600 hover:text-red-700"
                     >
                         <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -230,12 +265,12 @@ export default function RolesPage() {
                     )}
                 </Suspense>
             </div>
-            <Dialog open={open} 
-                onClose={handleClose} 
-                maxWidth="sm" 
-                fullWidth 
+            <Dialog open={open}
+                onClose={handleClose}
+                maxWidth="sm"
+                fullWidth
                 disableEscapeKeyDown
-                >
+            >
                 <DialogTitle>{editingRole ? 'Edit Role' : 'Add New Role'}</DialogTitle>
                 <form onSubmit={handleSubmit}>
                     <DialogContent>
@@ -277,6 +312,44 @@ export default function RolesPage() {
                     </DialogActions>
                 </form>
             </Dialog>
+
+            {/* Delete Confirmation Dialog */}
+            <Dialog
+                open={deleteConfirmOpen}
+                onClose={handleDeleteCancel}
+                aria-labelledby="delete-dialog-title"
+                aria-describedby="delete-dialog-description"
+            >
+                <DialogTitle id="delete-dialog-title">
+                    Confirm Delete
+                </DialogTitle>
+                <DialogContent>
+                    <DialogContentText id="delete-dialog-description">
+                        Are you sure you want to delete this role? This action cannot be undone.
+                    </DialogContentText>
+                </DialogContent>
+                <DialogActions>
+                    <Button onClick={handleDeleteCancel}>Cancel</Button>
+                    <Button onClick={handleDeleteConfirm} color="error" variant="contained">
+                        Delete
+                    </Button>
+                </DialogActions>
+            </Dialog>
+            {/* Snackbar Notification */}
+            <Snackbar
+                open={snackbar.open}
+                autoHideDuration={6000}
+                onClose={handleSnackbarClose}
+                anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
+            >
+                <Alert
+                    onClose={handleSnackbarClose}
+                    severity={snackbar.severity}
+                    sx={{ width: '100%' }}
+                >
+                    {snackbar.message}
+                </Alert>
+            </Snackbar>
         </div>
     );
 }

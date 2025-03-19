@@ -1,11 +1,9 @@
 "use client";
 
-import { Box, Link, Toolbar } from '@mui/material';
+import { Box, } from '@mui/material';
 import React, { useEffect, useState } from 'react';
 import Header from './Header';
 import Sidebar from './Sidebar';
-
-const drawerWidth = 240;
 
 interface Props {
     children: React.ReactNode;

@@ -1,11 +1,8 @@
 'use client';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import Link from 'next/link';
-import Image from 'next/image';
-import { usePathname } from 'next/navigation';
 
 export default function LoginPage() {
-    const pathname = usePathname();
     const [formData, setFormData] = useState({
         email: '',
         password: ''

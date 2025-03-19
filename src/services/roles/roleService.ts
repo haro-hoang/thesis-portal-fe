@@ -1,7 +1,5 @@
 import axios from 'axios';
-import { CreateRoleDto } from './create-role.interface';
-import { Role } from './role.interface';
-import { UpdateRoleDto } from './update-role.interface';
+import { CreateRoleDto, Role, UpdateRoleDto } from './@/types/role';
 
 const API_URL = 'http://localhost:5001/role';
 interface PaginationParams {
@@ -14,7 +12,7 @@ export const getRoles = async ({ page, pageSize }: PaginationParams) => {
     const response = await axios.get(API_URL, {
         params: {
             page,
-            limit: pageSize
+            pageSize: pageSize
         }
     });
     return {

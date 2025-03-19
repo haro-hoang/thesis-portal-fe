@@ -1,0 +1,32 @@
+// thesis-status.enum.ts
+export enum ThesisStatus {
+    DaPheDuyet = 'Đã phê duyệt',               // Đã giao
+    DangThucHien = 'Đang thực hiện',
+    DeNghiChinhSua = 'Đề nghị chỉnh sửa/thay đổi',
+    DaChinhSua = 'Đã chỉnh sửa/thay đổi',
+    DeNghiGiaHan = 'Đề nghị gia hạn',
+    DaGiaHan = 'Đã gia hạn',
+    DaNop = 'Đã nộp',
+    DaKiemTraTrungLap = 'Đã kiểm tra trùng lặp',
+    DatYeuCauTrungLap = 'Đạt yêu cầu trùng lặp',
+    KhongDatYeuCauTrungLap = 'Không đạt yêu cầu trùng lặp',
+    ChoPhanBien = 'Chờ phản biện',
+    DaPhanBien = 'Đã phản biện',
+    GVHDDongYChoBaoVe = 'GVHD đồng ý cho bảo vệ',
+    ChoBaoVe = 'Chờ bảo vệ',
+    DaBaoVe = 'Đã bảo vệ',
+    BaoVeThanhCong = 'Đạt (Đã bảo vệ thành công)',
+    BaoVeThatBai = 'Không đạt (Bảo vệ không thành công)',
+    DeNghiChinhSuaSauBaoVe = 'Đề nghị chỉnh sửa sau bảo vệ',
+    DaNopBanSua = 'Đã nộp bản sửa',
+    DaHoanThanh = 'Đã hoàn thành (Kết thúc)',
+    BiDinhChi = 'Bị đình chỉ',
+    RutLui = 'Rút lui',
+    ChoBaoVeBoSung = 'Chờ bảo vệ bổ sung',
+    DaBaoVeBoSung = 'Đã bảo vệ bổ sung',
+    BaoVeBoSungThanhCong = 'Đạt (Bảo vệ bổ sung thành công)',
+    BaoVeBoSungThatBai = 'Không đạt (Bảo vệ bổ sung không thành công)',
+    ChoPhucKhao = 'Chờ phúc khảo',
+    DaPhucKhao = 'Đã phúc khảo',
+  }
+  
