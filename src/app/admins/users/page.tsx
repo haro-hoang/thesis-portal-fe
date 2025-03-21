@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { Suspense } from 'react';
+import { useTranslation } from 'react-i18next';
 import {
     Button,
     Dialog,
@@ -25,6 +26,7 @@ import { getRoles } from '@/services/roles/roleService';
 import { User, Role } from '@/services/users/@/types/user';
 
 export default function UsersPage() {
+    const { t } = useTranslation();
     const [users, setUsers] = useState<User[]>([]);
     const [isLoading, setIsLoading] = useState<boolean>(true);
     const [paginationModel, setPaginationModel] = useState({
@@ -205,30 +207,30 @@ export default function UsersPage() {
     const columns: GridColDef[] = [
         {
             field: 'username',
-            headerName: 'Username',
+            headerName: t('users.username'),
             flex: 1,
             minWidth: 130
         },
         {
             field: 'email',
-            headerName: 'Email',
+            headerName: t('users.email'),
             flex: 1.5,
             minWidth: 200
         },
         {
             field: 'fullName',
-            headerName: 'Full Name',
+            headerName: t('users.fullName'),
             flex: 1.5,
             minWidth: 200
         },
         {
             field: 'roles',
-            headerName: 'Roles',
+            headerName: t('users.roles'),
             flex: 1,
             minWidth: 150,
             renderCell: (params) => (
                 <div className="flex flex-wrap gap-1 items-center">
-                    <div sx={{ display: 'flex', gap: 1 }}>
+                    <div>
                         {params.row.roles && params.row.roles.map((role: Role) => (
                             <span key={role.id} className="px-2 py-1 text-xs rounded-full bg-blue-100 text-blue-800 ml-1">
                                 {role.name}
@@ -240,7 +242,7 @@ export default function UsersPage() {
         },
         {
             field: 'status',
-            headerName: 'Status',
+            headerName: t('users.status'),
             flex: 0.8,
             minWidth: 100,
             renderCell: (params) => (
@@ -258,7 +260,7 @@ export default function UsersPage() {
         },
         {
             field: 'actions',
-            headerName: 'Actions',
+            headerName: t('common.actions'),
             flex: 0.8,
             minWidth: 100,
             sortable: false,
@@ -290,17 +292,17 @@ export default function UsersPage() {
     return (
         <div className="container mx-auto px-4 py-8">
             <div className="flex justify-between items-center mb-2">
-                <h1 className="text-2xl font-bold">Users Management</h1>
+                <h1 className="text-2xl font-bold">{t('users.management')}</h1>
             </div>
             <div className="flex justify-end mb-2">
                 <Button variant="contained" color="primary" onClick={() => handleOpen()}>
-                    <Add /><span className="mr-2">Add New User</span>
+                    <Add /><span className="mr-2">{t('users.addNewUser')}</span>
                 </Button>
             </div>
             <div className="bg-white rounded-lg shadow overflow-hidden">
-                <Suspense fallback={<div className="p-4 text-center">Loading...</div>}>
+                <Suspense fallback={<div className="p-4 text-center">{t('common.loading')}</div>}>
                     {isLoading ? (
-                        <div className="p-4 text-center">Loading...</div>
+                        <div className="p-4 text-center">{t('common.loading')}</div>
                     ) : (
                         <Paper sx={{ minHeight: 500, width: '100%' }}>
                             <DataGrid
@@ -357,7 +359,7 @@ export default function UsersPage() {
                 onBackdropClick={() => { }}
             >
                 <DialogTitle>
-                    {editingUser ? 'Edit User' : 'Add New User'}
+                    {editingUser ? t('users.editUser') : t('users.addNewUser')}
                     <IconButton
                         aria-label="close"
                         onClick={handleClose}
@@ -376,7 +378,7 @@ export default function UsersPage() {
                         <TextField
                             autoFocus
                             margin="dense"
-                            label="Username"
+                            label={t('users.username')}
                             type="text"
                             fullWidth
                             value={formData.username}
@@ -386,7 +388,7 @@ export default function UsersPage() {
                         {!editingUser && (
                             <TextField
                                 margin="dense"
-                                label="Password"
+                                label={t('users.password')}
                                 type="password"
                                 fullWidth
                                 value={formData.password}
@@ -396,7 +398,7 @@ export default function UsersPage() {
                         )}
                         <TextField
                             margin="dense"
-                            label="Email"
+                            label={t('users.email')}
                             type="email"
                             fullWidth
                             value={formData.email}
@@ -405,7 +407,7 @@ export default function UsersPage() {
                         />
                         <TextField
                             margin="dense"
-                            label="Full Name"
+                            label={t('users.fullName')}
                             type="text"
                             fullWidth
                             value={formData.fullName}
@@ -419,7 +421,7 @@ export default function UsersPage() {
                                     onChange={(e) => setFormData({ ...formData, isActive: e.target.checked })}
                                 />
                             }
-                            label="Active"
+                            label={t('users.active')}
                         />
                         <Autocomplete
                             multiple
@@ -428,14 +430,14 @@ export default function UsersPage() {
                             value={formData.roles}
                             onChange={(_event, newValue) => setFormData({ ...formData, roles: newValue })}
                             renderInput={(params) => (
-                                <TextField {...params} margin="dense" label="Roles" placeholder="Select Roles" />
+                                <TextField {...params} margin="dense" label={t('users.roles')} placeholder={t('users.selectRoles')} />
                             )}
                         />
                     </DialogContent>
                     <DialogActions>
-                        <Button onClick={handleClose}>Cancel</Button>
+                        <Button onClick={handleClose}>{t('common.cancel')}</Button>
                         <Button type="submit" variant="contained" color="primary">
-                            {editingUser ? 'Save' : 'Create'}
+                            {editingUser ? t('common.save') : t('common.create')}
                         </Button>
                     </DialogActions>
                 </form>
@@ -445,36 +447,31 @@ export default function UsersPage() {
             <Dialog
                 open={deleteConfirmOpen}
                 onClose={handleDeleteCancel}
-                aria-labelledby="delete-dialog-title"
-                aria-describedby="delete-dialog-description"
             >
-                <DialogTitle id="delete-dialog-title">
-                    Confirm Delete
-                </DialogTitle>
+                <DialogTitle>{t('users.confirmDelete')}</DialogTitle>
                 <DialogContent>
-                    <DialogContentText id="delete-dialog-description">
-                        Are you sure you want to delete this user? This action cannot be undone.
+                    <DialogContentText>
+                        {t('users.deleteConfirmation')}
                     </DialogContentText>
                 </DialogContent>
                 <DialogActions>
-                    <Button onClick={handleDeleteCancel}>Cancel</Button>
-                    <Button onClick={handleDeleteConfirm} color="error" variant="contained">
-                        Delete
+                    <Button onClick={handleDeleteCancel}>{t('common.cancel')}</Button>
+                    <Button onClick={handleDeleteConfirm} color="error" autoFocus>
+                        {t('common.delete')}
                     </Button>
                 </DialogActions>
             </Dialog>
 
-            {/* Snackbar Notification */}
+            {/* Snackbar for notifications */}
             <Snackbar
                 open={snackbar.open}
                 autoHideDuration={6000}
                 onClose={handleSnackbarClose}
-                anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
+                anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
             >
-                <Alert
-                    onClose={handleSnackbarClose}
+                <Alert 
+                    onClose={handleSnackbarClose} 
                     severity={snackbar.severity}
-                    sx={{ width: '100%' }}
                 >
                     {snackbar.message}
                 </Alert>

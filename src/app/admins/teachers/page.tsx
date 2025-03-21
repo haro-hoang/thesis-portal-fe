@@ -5,8 +5,10 @@ import { CircularProgress, debounce, InputAdornment, Paper, Table, TableBody, Ta
 import { getTeachers } from '@/services/teachers/teacherService';
 import { Teacher } from '@/services/teachers/@/types/teacher';
 import SearchIcon from '@mui/icons-material/Search';
+import { useTranslation } from 'react-i18next';
 
 export default function TeachersPage() {
+    const { t } = useTranslation();
     const [teachers, setTeachers] = useState<Teacher[]>([]);
     const [isLoading, setIsLoading] = useState(true);
     const [page, setPage] = useState(0);
@@ -68,13 +70,13 @@ export default function TeachersPage() {
     return (
 
         <div className="container mx-auto px-4 py-8">
-            <h1 className="text-2xl font-bold mb-4">Teachers Overview</h1>
+            <h1 className="text-2xl font-bold mb-4">{t('teachers.overview')}</h1>
             <Paper sx={{ width: '100%', overflow: 'hidden' }}>
                 <div className="mb-4">
                     <TextField
                         fullWidth
                         variant="outlined"
-                        placeholder="Search teachers..."
+                        placeholder={t('teachers.searchPlaceholder')}
                         value={searchQuery}
                         onChange={handleSearchChange}
                         InputProps={{
@@ -106,12 +108,12 @@ export default function TeachersPage() {
                         <TableHead>
                             <TableRow>
                                 {[
-                                    'Username',
-                                    'Full Name',
-                                    'Email',
+                                    t('teachers.username'),
+                                    t('teachers.fullName'),
+                                    t('teachers.email'),
                                     // 'Phone',
-                                    'Department',
-                                    'Dept. Code',
+                                    t('teachers.department'),
+                                    t('teachers.departmentCode'),
                                     // 'Role'
                                 ].map((header) => (
                                     <TableCell
@@ -160,13 +162,14 @@ export default function TeachersPage() {
                 </TableContainer>
 
                 <TablePagination
-                    rowsPerPageOptions={[10, 25, 50]}
+                    rowsPerPageOptions={[10, 25, 100]}
                     component="div"
                     count={total}
                     rowsPerPage={rowsPerPage}
                     page={page}
                     onPageChange={handleChangePage}
                     onRowsPerPageChange={handleChangeRowsPerPage}
+                    labelRowsPerPage={t('common.rowsPerPage')}
                 />
             </Paper>
         </div>

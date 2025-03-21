@@ -2,10 +2,12 @@
 "use client";
 import React, { useState } from 'react';
 import Link from 'next/link';
-
+import LanguageSwitcher from './LanguageSwitcher';
+import { useTranslation } from 'react-i18next';
 
 const Header = () => {
     const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+    const { t } = useTranslation();
 
     const toggleDropdown = () => {
         setIsDropdownOpen(!isDropdownOpen);
@@ -20,7 +22,7 @@ const Header = () => {
                         <input
                             type="search"
                             className="w-full pl-10 pr-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:border-blue-500"
-                            placeholder="Search..."
+                            placeholder={t('common.search')}
                         />
                         <div className="absolute left-3 top-2.5">
                             <svg className="h-5 w-5 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -32,6 +34,11 @@ const Header = () => {
 
                 {/* Right Side Icons */}
                 <div className="flex items-center gap-4">
+                    {/* Language Switcher */}
+                    <div className="mr-2">
+                        <LanguageSwitcher />
+                    </div>
+
                     {/* Notifications */}
                     <button className="p-2 hover:bg-gray-100 rounded-full relative">
                         <svg className="h-6 w-6 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -49,7 +56,7 @@ const Header = () => {
                             </div>
                             <div className="hidden md:block">
                                 <p className="text-sm font-medium text-gray-700">John Doe</p>
-                                <p className="text-xs text-gray-500">Administrator</p>
+                                <p className="text-xs text-gray-500">{t('common.administrator')}</p>
                             </div>
                             <svg className="h-5 w-5 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
@@ -63,24 +70,23 @@ const Header = () => {
                                 href="/profile"
                                 className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
                             >
-                                Profile
+                                {t('common.profile')}
                             </Link>
                             <Link
                                 href="/settings"
                                 className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
                             >
-                                Settings
+                                {t('common.settings')}
                             </Link>
                             <div className="border-t border-gray-200"></div>
                             <button
                                 onClick={() => {/* Add logout logic here */ }}
                                 className="block w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-gray-100"
                             >
-                                Logout
+                                {t('common.logout')}
                             </button>
                         </div>
                     )}
-
                 </div>
             </div>
         </header>

@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect, useCallback } from 'react';
+import { useTranslation } from 'react-i18next';
 import {
     Paper,
     Table,
@@ -41,6 +42,7 @@ import { ThesisStatus } from '@/services/graduation-thesis/@/types/thesis-status
 
 
 export default function GraduationThesisPage() {
+    const { t } = useTranslation();
     // Table states
     const [theses, setTheses] = useState<GraduationThesis[]>([]);
     const [isLoading, setIsLoading] = useState(true);
@@ -63,35 +65,35 @@ export default function GraduationThesisPage() {
 
     const getStatusChipProps = (status: string) => {
         const statusConfig = {
-            "DaPheDuyet": { color: 'primary', icon: '✓' },
-            "DangThucHien": { color: 'info', icon: '🔄' },
-            "DeNghiChinhSua": { color: 'warning', icon: '✎' },
-            "DaChinhSua": { color: 'success', icon: '✓' },
-            "DeNghiGiaHan": { color: 'warning', icon: '⏰' },
-            "DaGiaHan": { color: 'info', icon: '⌛' },
-            "DaNop": { color: 'success', icon: '📄' },
-            "DaKiemTraTrungLap": { color: 'info', icon: '🔍' },
-            "DatYeuCauTrungLap": { color: 'success', icon: '✓' },
-            "KhongDatYeuCauTrungLap": { color: 'error', icon: '✕' },
-            "ChoPhanBien": { color: 'warning', icon: '⏳' },
-            "DaPhanBien": { color: 'success', icon: '📝' },
-            "GVHDDongYChoBaoVe": { color: 'success', icon: '👍' },
-            "ChoBaoVe": { color: 'warning', icon: '⌛' },
-            "DaBaoVe": { color: 'info', icon: '🎯' },
-            "BaoVeThanhCong": { color: 'success', icon: '🏆' },
-            "BaoVeThatBai": { color: 'error', icon: '❌' },
-            "DeNghiChinhSuaSauBaoVe": { color: 'warning', icon: '📝' },
-            "DaNopBanSua": { color: 'info', icon: '📄' },
-            "DaHoanThanh": { color: 'success', icon: '🎉' },
-            "BiDinhChi": { color: 'error', icon: '⛔' },
-            "RutLui": { color: 'error', icon: '🚫' },
-            "ChoBaoVeBoSung": { color: 'warning', icon: '⏳' },
-            "DaBaoVeBoSung": { color: 'info', icon: '🎯' },
-            "BaoVeBoSungThanhCong": { color: 'success', icon: '🏆' },
-            "BaoVeBoSungThatBai": { color: 'error', icon: '❌' },
-            "ChoPhucKhao": { color: 'warning', icon: '⏳' },
-            "DaPhucKhao": { color: 'info', icon: '✓' },
-        } as const;
+            'Draft': {
+                color: 'default' as 'default',
+                icon: '📝'
+            },
+            'Submitted': {
+                color: 'info' as 'info',
+                icon: '📨'
+            },
+            'Approved': {
+                color: 'success' as 'success',
+                icon: '✅'
+            },
+            'Rejected': {
+                color: 'error' as 'error',
+                icon: '❌'
+            },
+            'UnderReview': {
+                color: 'warning' as 'warning',
+                icon: '🔍'
+            },
+            'Completed': {
+                color: 'success' as 'success',
+                icon: '🎓'
+            },
+            'Canceled': {
+                color: 'error' as 'error',
+                icon: '🚫'
+            }
+        };
 
         const config = statusConfig[status as keyof typeof statusConfig] || { color: 'default', icon: '❔' };
 
@@ -207,13 +209,13 @@ export default function GraduationThesisPage() {
     return (
         <div className="container mx-auto px-4 py-8">
             <div className="flex justify-between items-center mb-4">
-                <h1 className="text-2xl font-bold">Graduation Thesis Management</h1>
+                <h1 className="text-2xl font-bold">{t('graduationThesis.management')}</h1>
                 <Button
                     variant="contained"
                     startIcon={<AddIcon />}
                     onClick={() => handleOpenDialog('add')}
                 >
-                    Add New Thesis
+                    {t('graduationThesis.addNewThesis')}
                 </Button>
             </div>
 
@@ -221,7 +223,7 @@ export default function GraduationThesisPage() {
                 <TextField
                     fullWidth
                     variant="outlined"
-                    placeholder="Search theses..."
+                    placeholder={t('graduationThesis.searchPlaceholder')}
                     value={searchQuery}
                     onChange={handleSearchChange}
                     InputProps={{
@@ -239,30 +241,30 @@ export default function GraduationThesisPage() {
                     <Table stickyHeader aria-label="graduation thesis table">
                         <TableHead>
                             <TableRow>
-                                <TableCell sx={headerCellStyle}>Title</TableCell>
-                                <TableCell sx={headerCellStyle}>Description</TableCell>
-                                <TableCell sx={headerCellStyle}>Lecturer</TableCell>
-                                <TableCell sx={headerCellStyle}>Students</TableCell>
-                                <TableCell sx={headerCellStyle}>Created At</TableCell>
-                                <TableCell sx={headerCellStyle}>Status</TableCell>
-                                <TableCell sx={headerCellStyle}>Actions</TableCell>
+                                <TableCell sx={headerCellStyle}>{t('graduationThesis.title')}</TableCell>
+                                <TableCell sx={headerCellStyle}>{t('graduationThesis.description')}</TableCell>
+                                <TableCell sx={headerCellStyle}>{t('graduationThesis.lecturer')}</TableCell>
+                                <TableCell sx={headerCellStyle}>{t('graduationThesis.students')}</TableCell>
+                                <TableCell sx={headerCellStyle}>{t('graduationThesis.createdAt')}</TableCell>
+                                <TableCell sx={headerCellStyle}>{t('graduationThesis.status')}</TableCell>
+                                <TableCell sx={headerCellStyle}>{t('common.actions')}</TableCell>
                             </TableRow>
                         </TableHead>
                         <TableBody>
                             {isLoading ? (
                                 <TableRow>
-                                    <TableCell colSpan={5} align="center" sx={{ height: '400px' }}>
+                                    <TableCell colSpan={7} align="center" sx={{ p: 3 }}>
                                         <CircularProgress />
                                     </TableCell>
                                 </TableRow>
-                            ) : theses && theses.length === 0 ? (
+                            ) : theses.length === 0 ? (
                                 <TableRow>
-                                    <TableCell colSpan={5} align="center" sx={{ height: '400px' }}>
-                                        No theses found
+                                    <TableCell colSpan={7} align="center">
+                                        {t('graduationThesis.noThesesFound')}
                                     </TableCell>
                                 </TableRow>
                             ) : (
-                                theses && theses.length > 0 && theses.map((thesis) => (
+                                theses.map((thesis) => (
                                     <TableRow
                                         key={thesis.id}
                                         hover
@@ -275,7 +277,7 @@ export default function GraduationThesisPage() {
                                         <TableCell>{thesis.description}</TableCell>
                                         <TableCell>{thesis.lecturer?.fullName}</TableCell>
                                         <TableCell>
-                                            <div className="space-y-1">
+                                            <div className="space-y-2">
                                                 {thesis.students?.map(({ student }, index) => (
                                                     <div key={student.id}
                                                         className={`text-sm p-2 rounded-md ${index % 2 === 0
@@ -335,6 +337,7 @@ export default function GraduationThesisPage() {
                     page={page}
                     onPageChange={handleChangePage}
                     onRowsPerPageChange={handleChangeRowsPerPage}
+                    labelRowsPerPage={t('common.rowsPerPage')}
                 />
             </Paper>
 
@@ -351,18 +354,18 @@ export default function GraduationThesisPage() {
                 open={deleteDialogOpen}
                 onClose={() => setDeleteDialogOpen(false)}
             >
-                <DialogTitle>Confirm Delete</DialogTitle>
+                <DialogTitle>{t('graduationThesis.confirmDelete')}</DialogTitle>
                 <DialogContent>
-                    Are you sure you want to delete this thesis? This action cannot be undone.
+                    {t('graduationThesis.deleteConfirmation')}
                 </DialogContent>
                 <DialogActions>
-                    <Button onClick={() => setDeleteDialogOpen(false)}>Cancel</Button>
+                    <Button onClick={() => setDeleteDialogOpen(false)}>{t('common.cancel')}</Button>
                     <Button
                         onClick={handleDeleteConfirm}
                         color="error"
                         variant="contained"
                     >
-                        Delete
+                        {t('common.delete')}
                     </Button>
                 </DialogActions>
             </Dialog>

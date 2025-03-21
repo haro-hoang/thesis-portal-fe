@@ -5,8 +5,10 @@ import { getStudents } from "@/services/students/studentService";
 import { Paper } from "@mui/material";
 import { DataGrid, GridColDef, GridFilterModel } from "@mui/x-data-grid";
 import { Suspense, useCallback, useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 
 export default function StudentsPage() {
+  const { t } = useTranslation();
   const [students, setStudents] = useState<Student[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [paginationModel, setPaginationModel] = useState({
@@ -63,13 +65,13 @@ export default function StudentsPage() {
   const columns: GridColDef[] = [
     {
       field: 'fullName',
-      headerName: 'Full Name',
+      headerName: t('students.fullName'),
       flex: 1.5,
       minWidth: 180,
     },
     {
       field: 'dateOfBirth',
-      headerName: 'DOB',
+      headerName: t('students.dateOfBirth'),
       flex: 1,
       minWidth: 130,
       // Format the date (assuming ISO string format)
@@ -77,31 +79,31 @@ export default function StudentsPage() {
     },
     {
       field: 'gender',
-      headerName: 'Gender',
+      headerName: t('students.gender'),
       flex: 0.8,
       minWidth: 100,
     },
     {
       field: 'phoneNumber',
-      headerName: 'Phone',
+      headerName: t('students.phone'),
       flex: 1,
       minWidth: 130,
     },
     {
       field: 'email',
-      headerName: 'Email',
+      headerName: t('students.email'),
       flex: 1.5,
       minWidth: 180,
     },
     {
       field: 'className',
-      headerName: 'Class',
+      headerName: t('students.class'),
       flex: 1,
       minWidth: 130,
     },
     {
       field: 'programName',
-      headerName: 'Program Name',
+      headerName: t('students.program'),
       flex: 1,
       minWidth: 150,
     },
@@ -115,9 +117,9 @@ export default function StudentsPage() {
 
   return (
     <div className="container mx-auto px-4 py-8">
-      <h1 className="text-2xl font-bold mb-4">Students Overview</h1>
+      <h1 className="text-2xl font-bold mb-4">{t('students.overview')}</h1>
       <Paper sx={{ maxHeight: '75vh', width: '100%', overflow: 'auto' }}>
-        <Suspense fallback={<div className="p-4 text-center">Loading...</div>}>
+        <Suspense fallback={<div className="p-4 text-center">{t('common.loading')}</div>}>
           <DataGrid
             rows={students}
             columns={columns}

@@ -1,8 +1,10 @@
 'use client';
 import { useState } from 'react';
 import Link from 'next/link';
+import { useTranslation } from 'react-i18next';
 
 export default function LoginPage() {
+    const { t } = useTranslation();
     const [formData, setFormData] = useState({
         email: '',
         password: ''
@@ -24,11 +26,11 @@ export default function LoginPage() {
     return (
         <div className="min-h-screen flex items-center justify-center bg-gray-100">
             <div className="bg-white p-8 rounded-lg shadow-md w-96">
-                <h1 className="text-2xl font-bold text-center mb-6">Login</h1>
+                <h1 className="text-2xl font-bold text-center mb-6">{t('login.title')}</h1>
 
                 <form onSubmit={handleSubmit} className="space-y-4">
                     <div>
-                        <label className="block text-sm font-medium text-gray-700">Email</label>
+                        <label className="block text-sm font-medium text-gray-700">{t('login.email')}</label>
                         <input
                             type="email"
                             value={formData.email}
@@ -39,7 +41,7 @@ export default function LoginPage() {
                     </div>
 
                     <div>
-                        <label className="block text-sm font-medium text-gray-700">Password</label>
+                        <label className="block text-sm font-medium text-gray-700">{t('login.password')}</label>
                         <div className="relative">
                             <input
                                 type={showPassword ? "text" : "password"}
@@ -69,7 +71,7 @@ export default function LoginPage() {
                             href="/auth/forgot-password"
                             className="text-sm text-blue-600 hover:underline mt-1 inline-block"
                         >
-                            Forgot password?
+                            {t('login.forgotPassword')}
                         </Link>
                     </div>
 
@@ -77,7 +79,7 @@ export default function LoginPage() {
                         type="submit"
                         className="w-full bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 transition-colors"
                     >
-                        Login
+                        {t('login.loginButton')}
                     </button>
 
                     <div className="relative">
@@ -85,7 +87,7 @@ export default function LoginPage() {
                             <div className="w-full border-t border-gray-300"></div>
                         </div>
                         <div className="relative flex justify-center text-sm">
-                            <span className="px-2 bg-white text-gray-500">Or continue with</span>
+                            <span className="px-2 bg-white text-gray-500">{t('login.orContinueWith')}</span>
                         </div>
                     </div>
 
@@ -100,14 +102,14 @@ export default function LoginPage() {
                             <path d="M10 11H0V21H10V11Z" fill="#00A4EF" />
                             <path d="M21 11H11V21H21V11Z" fill="#FFB900" />
                         </svg>
-                        <span>Sign in with Microsoft</span>
+                        <span>{t('login.signInWithMicrosoft')}</span>
                     </button>
                 </form>
 
                 <p className="mt-4 text-center text-sm text-gray-600">
-                    Don't have an account?{' '}
+                    {t('login.noAccount')}{' '}
                     <Link href="/auth/register" className="text-blue-600 hover:underline">
-                        Register
+                        {t('login.register')}
                     </Link>
                 </p>
             </div>

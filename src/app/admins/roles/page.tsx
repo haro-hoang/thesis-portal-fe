@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { Suspense } from 'react';
+import { useTranslation } from 'react-i18next';
 import { createRole, deleteRole, getRoles, updateRole } from '@/services/roles/roleService';
 import { Alert, Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, FormControlLabel, Paper, Snackbar, Switch, TextField } from '@mui/material';
 import { DataGrid, GridColDef } from '@mui/x-data-grid';
@@ -9,6 +10,7 @@ import { Add } from '@mui/icons-material';
 import { Role } from '@/services/roles/@/types/role';
 
 export default function RolesPage() {
+    const { t } = useTranslation();
     const [roles, setRoles] = useState<Role[]>([]);
     const [isLoading, setIsLoading] = useState(true);
     const [paginationModel, setPaginationModel] = useState({
@@ -70,7 +72,7 @@ export default function RolesPage() {
             await deleteRole(deletingId);
             setSnackbar({
                 open: true,
-                message: 'Role deleted successfully',
+                message: t('roles.roleDeletedSuccessfully'),
                 severity: 'success'
             });
             fetchRoles();
@@ -78,7 +80,7 @@ export default function RolesPage() {
             console.error('Error deleting role:', error);
             setSnackbar({
                 open: true,
-                message: 'Error deleting role',
+                message: t('roles.errorDeletingRole'),
                 severity: 'error'
             });
         } finally {
@@ -110,19 +112,19 @@ export default function RolesPage() {
     const columns: GridColDef[] = [
         {
             field: 'name',
-            headerName: 'Role Name',
+            headerName: t('roles.roleName'),
             flex: 1,
             minWidth: 130
         },
         {
             field: 'description',
-            headerName: 'Description',
+            headerName: t('roles.description'),
             flex: 2,
             minWidth: 200
         },
         {
             field: 'status',
-            headerName: 'Status',
+            headerName: t('roles.status'),
             flex: 0.8,
             minWidth: 100,
             renderCell: (params) => (
@@ -133,13 +135,13 @@ export default function RolesPage() {
                         : 'bg-red-100 text-red-800'
                         }`}
                 >
-                    {params.row.isActive ? 'Active' : 'Inactive'}
+                    {params.row.isActive ? t('common.active') : t('common.inactive')}
                 </button>
             ),
         },
         {
             field: 'actions',
-            headerName: 'Actions',
+            headerName: t('common.actions'),
             flex: 0.8,
             minWidth: 100,
             sortable: false,
@@ -209,17 +211,17 @@ export default function RolesPage() {
     return (
         <div className="container mx-auto px-4 py-8">
             <div className="flex justify-between items-center mb-2">
-                <h1 className="text-2xl font-bold">Roles Management</h1>
+                <h1 className="text-2xl font-bold">{t('roles.management')}</h1>
             </div>
             <div className="flex justify-end mb-2">
                 <Button variant="contained" color="primary" onClick={() => handleOpen()}>
-                    <Add /><span className='mr-2'>Add New Role</span>
+                    <Add /><span className='mr-2'>{t('roles.addNewRole')}</span>
                 </Button>
             </div>
             <div className="bg-white rounded-lg shadow overflow-hidden">
-                <Suspense fallback={<div className="p-4 text-center">Loading...</div>}>
+                <Suspense fallback={<div className="p-4 text-center">{t('common.loading')}</div>}>
                     {isLoading ? (
-                        <div className="p-4 text-center">Loading...</div>
+                        <div className="p-4 text-center">{t('common.loading')}</div>
                     ) : (
                         <Paper sx={{ minHeight: 500, width: '100%' }}>
                             <DataGrid
@@ -271,13 +273,13 @@ export default function RolesPage() {
                 fullWidth
                 disableEscapeKeyDown
             >
-                <DialogTitle>{editingRole ? 'Edit Role' : 'Add New Role'}</DialogTitle>
+                <DialogTitle>{editingRole ? t('roles.editRole') : t('roles.addNewRole')}</DialogTitle>
                 <form onSubmit={handleSubmit}>
                     <DialogContent>
                         <TextField
                             autoFocus
                             margin="dense"
-                            label="Role Name"
+                            label={t('roles.roleName')}
                             type="text"
                             fullWidth
                             value={formData.name}
@@ -286,7 +288,7 @@ export default function RolesPage() {
                         />
                         <TextField
                             margin="dense"
-                            label="Description"
+                            label={t('roles.description')}
                             type="text"
                             fullWidth
                             multiline
@@ -301,13 +303,13 @@ export default function RolesPage() {
                                     onChange={(e) => setFormData({ ...formData, isActive: e.target.checked })}
                                 />
                             }
-                            label="Active"
+                            label={t('common.active')}
                         />
                     </DialogContent>
                     <DialogActions>
-                        <Button onClick={handleClose}>Cancel</Button>
+                        <Button onClick={handleClose}>{t('common.cancel')}</Button>
                         <Button type="submit" variant="contained" color="primary">
-                            {editingRole ? 'Save' : 'Create'}
+                            {editingRole ? t('common.save') : t('common.create')}
                         </Button>
                     </DialogActions>
                 </form>
@@ -317,21 +319,19 @@ export default function RolesPage() {
             <Dialog
                 open={deleteConfirmOpen}
                 onClose={handleDeleteCancel}
-                aria-labelledby="delete-dialog-title"
-                aria-describedby="delete-dialog-description"
             >
-                <DialogTitle id="delete-dialog-title">
-                    Confirm Delete
+                <DialogTitle>
+                    {t('roles.confirmDelete')}
                 </DialogTitle>
                 <DialogContent>
-                    <DialogContentText id="delete-dialog-description">
-                        Are you sure you want to delete this role? This action cannot be undone.
+                    <DialogContentText>
+                        {t('roles.deleteConfirmation')}
                     </DialogContentText>
                 </DialogContent>
                 <DialogActions>
-                    <Button onClick={handleDeleteCancel}>Cancel</Button>
+                    <Button onClick={handleDeleteCancel}>{t('common.cancel')}</Button>
                     <Button onClick={handleDeleteConfirm} color="error" variant="contained">
-                        Delete
+                        {t('common.delete')}
                     </Button>
                 </DialogActions>
             </Dialog>
@@ -340,7 +340,7 @@ export default function RolesPage() {
                 open={snackbar.open}
                 autoHideDuration={6000}
                 onClose={handleSnackbarClose}
-                anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
+                anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
             >
                 <Alert
                     onClose={handleSnackbarClose}
