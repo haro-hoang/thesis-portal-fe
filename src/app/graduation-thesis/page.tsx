@@ -23,15 +23,17 @@ import {
     Autocomplete,
     FormControl,
     FormHelperText,
-    Chip
+    Chip,
+    Tooltip
 } from '@mui/material';
 import {
     Add as AddIcon,
     Search as SearchIcon,
     Edit as EditIcon,
     Delete as DeleteIcon,
-    Padding
+    Timeline as TimelineIcon
 } from '@mui/icons-material';
+import { useRouter } from 'next/navigation';
 import debounce from 'lodash/debounce';
 import { GraduationThesis } from '@/services/graduation-thesis/@/types/graduation-thesis';
 import { getTeachers } from '@/services/teachers/teacherService';
@@ -43,6 +45,7 @@ import { ThesisStatus } from '@/services/graduation-thesis/@/types/thesis-status
 
 export default function GraduationThesisPage() {
     const { t } = useTranslation();
+    const router = useRouter();
     // Table states
     const [theses, setTheses] = useState<GraduationThesis[]>([]);
     const [isLoading, setIsLoading] = useState(true);
@@ -199,6 +202,10 @@ export default function GraduationThesisPage() {
         }
     };
 
+    const handleViewProgress = (thesisId: string) => {
+        router.push(`/graduation-thesis/${thesisId}/progress`);
+    };
+
     const headerCellStyle = {
         backgroundColor: '#22a6b3',
         color: 'white',
@@ -247,13 +254,13 @@ export default function GraduationThesisPage() {
                                 <TableCell sx={headerCellStyle}>{t('graduationThesis.students')}</TableCell>
                                 <TableCell sx={headerCellStyle}>{t('graduationThesis.createdAt')}</TableCell>
                                 <TableCell sx={headerCellStyle}>{t('graduationThesis.status')}</TableCell>
-                                <TableCell sx={headerCellStyle}>{t('common.actions')}</TableCell>
+                                <TableCell sx={{ ...headerCellStyle, minWidth: '200px' }}>{t('common.actions')}</TableCell>
                             </TableRow>
                         </TableHead>
                         <TableBody>
                             {isLoading ? (
                                 <TableRow>
-                                    <TableCell colSpan={7} align="center" sx={{ p: 3 }}>
+                                    <TableCell colSpan={7} align="center">
                                         <CircularProgress />
                                     </TableCell>
                                 </TableRow>
@@ -265,63 +272,51 @@ export default function GraduationThesisPage() {
                                 </TableRow>
                             ) : (
                                 theses.map((thesis) => (
-                                    <TableRow
-                                        key={thesis.id}
-                                        hover
-                                        sx={{
-                                            '&:hover': { backgroundColor: 'rgb(249 250 251)' },
-                                            '& td': { padding: '0.75rem 1.5rem' }
-                                        }}
-                                    >
+                                    <TableRow key={thesis.id}>
                                         <TableCell>{thesis.title}</TableCell>
                                         <TableCell>{thesis.description}</TableCell>
                                         <TableCell>{thesis.lecturer?.fullName}</TableCell>
                                         <TableCell>
-                                            <div className="space-y-2">
-                                                {thesis.students?.map(({ student }, index) => (
-                                                    <div key={student.id}
-                                                        className={`text-sm p-2 rounded-md ${index % 2 === 0
-                                                            ? 'bg-blue-50 border-l-4 border-blue-400'
-                                                            : 'bg-green-50 border-l-4 border-green-400'
-                                                            }`}
-                                                    >
-                                                        {student.fullName} - {student.email}
-                                                        <div className="text-xs text-gray-500">
-                                                            {student.className} - {student.programName}
-                                                        </div>
-                                                    </div>
-                                                ))}
-                                            </div>
+                                            {thesis.students?.map((student) => student.student.fullName).join(', ')}
                                         </TableCell>
-                                        <TableCell>
-                                            {new Date(thesis.createdAt).toLocaleDateString()}
-                                        </TableCell>
+                                        <TableCell>{new Date(thesis.createdAt).toLocaleDateString()}</TableCell>
                                         <TableCell>
                                             {thesis.status && (
                                                 <Chip
                                                     color={getStatusChipProps(thesis.status).color}
-                                                    label={
-                                                        <span style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
-                                                            {getStatusChipProps(thesis.status).icon} {ThesisStatus[thesis.status as keyof typeof ThesisStatus]}
-                                                        </span>
-                                                    }
+                                                    label={thesis.status}
                                                     size="small"
                                                 />
                                             )}
                                         </TableCell>
                                         <TableCell>
-                                            <IconButton
-                                                color="primary"
-                                                onClick={() => handleOpenDialog('edit', thesis)}
-                                            >
-                                                <EditIcon />
-                                            </IconButton>
-                                            <IconButton
-                                                color="error"
-                                                onClick={() => handleDeleteClick(thesis.id)}
-                                            >
-                                                <DeleteIcon />
-                                            </IconButton>
+                                            <div className="flex gap-2">
+                                                <Tooltip title={t('progress.trackingTitle')}>
+                                                    <IconButton
+                                                        size="small"
+                                                        onClick={() => handleViewProgress(thesis.id)}
+                                                    >
+                                                        <TimelineIcon />
+                                                    </IconButton>
+                                                </Tooltip>
+                                                <Tooltip title={t('common.edit')}>
+                                                    <IconButton
+                                                        size="small"
+                                                        onClick={() => handleOpenDialog('edit', thesis)}
+                                                    >
+                                                        <EditIcon />
+                                                    </IconButton>
+                                                </Tooltip>
+                                                <Tooltip title={t('common.delete')}>
+                                                    <IconButton
+                                                        size="small"
+                                                        color="error"
+                                                        onClick={() => handleDeleteClick(thesis.id)}
+                                                    >
+                                                        <DeleteIcon />
+                                                    </IconButton>
+                                                </Tooltip>
+                                            </div>
                                         </TableCell>
                                     </TableRow>
                                 ))
@@ -330,14 +325,13 @@ export default function GraduationThesisPage() {
                     </Table>
                 </TableContainer>
                 <TablePagination
-                    rowsPerPageOptions={[10, 25, 50]}
+                    rowsPerPageOptions={[5, 10, 25]}
                     component="div"
                     count={total}
                     rowsPerPage={rowsPerPage}
                     page={page}
                     onPageChange={handleChangePage}
                     onRowsPerPageChange={handleChangeRowsPerPage}
-                    labelRowsPerPage={t('common.rowsPerPage')}
                 />
             </Paper>
 

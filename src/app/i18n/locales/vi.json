@@ -121,5 +121,18 @@
     "confirmDelete": "Xác nhận xóa",
     "deleteConfirmation": "Bạn có chắc chắn muốn xóa đề tài này? Hành động này không thể hoàn tác.",
     "noThesesFound": "Không tìm thấy đề tài nào"
+  },
+  "progress": {
+    "trackingTitle": "Theo dõi tiến độ",
+    "addLog": "Thêm nhật ký",
+    "editLog": "Chỉnh sửa nhật ký",
+    "weekNumber": "Tuần thứ",
+    "week": "Tuần",
+    "checkDate": "Ngày kiểm tra",
+    "workDone": "Công việc đã thực hiện",
+    "results": "Kết quả đạt được",
+    "teacherComment": "Nhận xét của giáo viên",
+    "noLogs": "Chưa có nhật ký nào",
+    "confirmDelete": "Bạn có chắc chắn muốn xóa nhật ký này?"
   }
 } 

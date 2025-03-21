@@ -121,5 +121,18 @@
     "confirmDelete": "Confirm Delete",
     "deleteConfirmation": "Are you sure you want to delete this thesis? This action cannot be undone.",
     "noThesesFound": "No theses found"
+  },
+  "progress": {
+    "trackingTitle": "Progress Tracking",
+    "addLog": "Add Log",
+    "editLog": "Edit Log",
+    "weekNumber": "Week Number",
+    "week": "Week",
+    "checkDate": "Check Date",
+    "workDone": "Work Done",
+    "results": "Results",
+    "teacherComment": "Teacher's Comment",
+    "noLogs": "No logs found",
+    "confirmDelete": "Are you sure you want to delete this log?"
   }
 } 
